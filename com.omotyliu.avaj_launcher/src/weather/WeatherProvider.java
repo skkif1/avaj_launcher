@@ -2,23 +2,36 @@ package src.weather;
 
 import src.Coordinates;
 
+import java.util.HashMap;
+import java.util.Random;
+
 public class WeatherProvider
 {
-    private WeatherProvider weatherProvider;
+    private static WeatherProvider weatherProvider;
 
-    private String[] weather;
+    private String[] weather = new String[]{"RAIN", "FOG", "SUN", "SNOW",};
 
-    public WeatherProvider() {
+    private Random random;
 
-    }
 
-    public WeatherProvider getProvider()
+    private WeatherProvider()
     {
-        return null;
+        random = new Random(System.currentTimeMillis());
     }
 
-    public String getCurrentWeather(Coordinates coordinates)
+    public static WeatherProvider getProvider()
     {
-        return "cirrentWeather";
+        if (weatherProvider == null)
+            return new WeatherProvider();
+        else return weatherProvider;
     }
+
+    public String getCurrentWeather(Coordinates coordinates) {
+
+        int i = random.nextInt(4);
+        return weather[i];
+    }
+
+
+
 }

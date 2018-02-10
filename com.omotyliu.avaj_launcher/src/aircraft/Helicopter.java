@@ -1,10 +1,9 @@
 package src.aircraft;
 
 import src.Coordinates;
-import src.Flyable;
-import src.WeatherTower;
+import src.weather.WeatherTower;
 
-public class Helicopter extends Aircraft implements Flyable
+public class Helicopter extends Aircraft
 {
 
     public Helicopter(String name, Coordinates coord)
@@ -15,10 +14,28 @@ public class Helicopter extends Aircraft implements Flyable
     @Override
     public void updateConditions() {
 
+        String weather = getWeatherTower().getWeather(coord);
+
+        switch (weather)
+        {
+            case "RAIN":
+                coord.change(coord.getLongitude() + 5, coord.getLatitude(), coord.getHeight());
+                super.updateConditions("It s rainy, day ....");
+                break;
+            case "FOG":
+                coord.change(coord.getLongitude() + 1, coord.getLatitude(), coord.getHeight());
+                super.updateConditions("Cant see anything, God save me");
+                break;
+            case "SUN":
+                coord.change(coord.getLongitude() + 10, coord.getLatitude(), coord.getHeight() + 2);
+                super.updateConditions("going well...");
+                break;
+            case "SNOW":
+                coord.change(coord.getLongitude(), coord.getLatitude(), coord.getHeight() - 12);
+                super.updateConditions("it is not good , I am falling down");
+                break;
+        }
     }
 
-    @Override
-    public void registerTower(WeatherTower tower) {
 
-    }
 }

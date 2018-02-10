@@ -1,4 +1,6 @@
-package src;
+package src.aircraft;
+
+import src.weather.WeatherTower;
 
 public interface Flyable
 {

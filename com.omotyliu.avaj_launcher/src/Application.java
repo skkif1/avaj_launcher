@@ -1,10 +1,21 @@
 package src;
 
+import src.aircraft.Flyable;
+import src.weather.Tower;
+import src.weather.WeatherTower;
+
+import java.util.List;
+
 public class Application
 {
 
+    private static WeatherTower tower;
+
     public static void main(String[] args)
     {
-        System.out.println(Integer.valueOf("2147483648"));
+        List<Flyable> flyables = InputReader.readAndCreate(args[0]);
+        tower = new WeatherTower();
+        tower.register(flyables);
+        tower.simulate(InputReader.countChanges);
     }
 }

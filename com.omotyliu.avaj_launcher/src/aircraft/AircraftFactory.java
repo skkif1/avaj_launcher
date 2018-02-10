@@ -2,22 +2,31 @@ package src.aircraft;
 
 import src.AvajInputException;
 import src.Coordinates;
-import src.Flyable;
 
 public class AircraftFactory
 {
 
-    private static final String[] SUPPORTED_TYPES = {"HELLICOPTER", "BALOON", "JETAIRCRAFT"};
+    private static final String[] SUPPORTED_TYPES = {"HELICOPTER", "BALOON", "JETPLANE"};
 
     public static Flyable newAircraft(String type, String name, int longitude, int latitude, int height)
     {
-        return null;
+        return newAircraft(type, name, new Coordinates(longitude, latitude, height));
     }
 
     public static Flyable newAircraft(String type, String name, Coordinates coord)
     {
         if(!checkType(type))
             throw new AvajInputException("Type not suported");
+
+        switch (type.toUpperCase())
+        {
+            case "HELICOPTER":
+                return new Helicopter(name, coord);
+            case "BALOON":
+                return new Balloon(name, coord);
+            case "JETPLANE":
+                return new JetPlain(name, coord);
+        }
         return null;
     }
 

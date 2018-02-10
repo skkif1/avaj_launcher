@@ -1,6 +1,7 @@
 package src;
 
 import src.aircraft.AircraftFactory;
+import src.aircraft.Flyable;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -8,14 +9,16 @@ import java.util.List;
 
 public class InputReader
 {
-    BufferedReader reader;
-    ArrayList<String> lines;
+    private static BufferedReader reader;
+    private static ArrayList<String> lines;
+    private static List<Flyable> flayable = new ArrayList<>();
+    static int countChanges;
 
 
     public InputReader() {
     }
 
-    private void getReader(String scenario)
+    private static void getReader(String scenario)
     {
 
         File file = new File(scenario);
@@ -28,9 +31,26 @@ public class InputReader
         }
     }
 
+    private static void getCount()
+    {
+        String count = lines.get(0);
 
+        try
+        {
+            long temp  = Long.valueOf(count);
+            if(temp < 1 || temp > Integer.MAX_VALUE)
+            {
+                throw new RuntimeException();
+            }
+            countChanges = (int) temp;
+            lines.remove(0);
+        }catch (Exception ex)
+        {
+            throw new AvajInputException("Number of simulations is wrong");
+        }
+    }
 
-    public List<Flyable> readAndCreate(String scenario) throws AvajInputException
+    static List<Flyable> readAndCreate(String scenario) throws AvajInputException
     {
         lines = new ArrayList<>();
         String line;
@@ -44,28 +64,28 @@ public class InputReader
         } catch (IOException e) {
             throw new AvajInputException("Something wrong wiith file");
         }
+        getCount();
         createAircraft();
-        return null;
+        return flayable;
     }
 
-    private void createAircraft()
+    private static void createAircraft()
     {
         for (String line : lines)
         {
             line = line.trim();
             String[] jet = line.split(" ");
-            Flyable flyable = createJet(jet);
+            flayable.add(createJet(jet));
         }
     }
 
-    private Flyable createJet(String[] jet)
+    private static Flyable createJet(String[] jet)
     {
         if(jet.length != 5)
             throw new AvajInputException("Scenario file is broken");
 
         Coordinates planeCoord = new Coordinates(Integer.valueOf(jet[2]), Integer.valueOf(jet[3]), Integer.valueOf(jet[4]));
-        Flyable plane = AircraftFactory.newAircraft(jet[0], jet[1], planeCoord);
-        return null;
+        return AircraftFactory.newAircraft(jet[0], jet[1], planeCoord);
     }
 }
 
