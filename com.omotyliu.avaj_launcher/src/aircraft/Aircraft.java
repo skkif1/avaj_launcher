@@ -2,32 +2,25 @@ package src.aircraft;
 
 import src.Coordinates;
 import src.Logger;
-import src.weather.Tower;
-import src.weather.WeatherTower;
 
-public abstract class Aircraft implements Flyable {
+public abstract class Aircraft {
 
-    private long id;
+    protected long id;
 
     protected String name;
 
     protected Coordinates coord;
 
-    private WeatherTower weatherTower;
-
     private static long idCounter = 0;
 
 
-    public Aircraft(String name, Coordinates coord) {
+    protected Aircraft(String name, Coordinates coord)
+    {
         this.id = nextId();
         this.name = name;
         this.coord = coord;
     }
 
-    @Override
-    public void registerTower(WeatherTower tower) {
-        this.weatherTower = tower;
-    }
 
     public String getCompoundName() {
         return getClass().getSimpleName() + "#" + name + "(" + id + ")";
@@ -37,19 +30,16 @@ public abstract class Aircraft implements Flyable {
         return idCounter++;
     }
 
-    WeatherTower getWeatherTower() {
-        return this.weatherTower;
-    }
-
-    public void updateConditions(String customMess) {
+    protected void updateConditions(String customMess) {
         Logger.logMessage(getCompoundName() + ": " + customMess);
         int height = (coord.getHeight() > 100) ? 100 : coord.getHeight();
+        int longit = (coord.getLongitude() < 0)  ? 0 : coord.getLongitude();
+        int lat = (coord.getLatitude() < 0)  ? 0 : coord.getLatitude();
 
-        coord.change(coord.getLongitude(), coord.getLatitude(), height);
+        coord.change(longit, lat, height);
         if (height <= 0)
         {
             Logger.logMessage(getCompoundName() + " landing my coordinates (long: " + coord.getLongitude() + ", lat: " + coord.getLatitude() + ")");
-            getWeatherTower().unregister(this);
         }
     }
 

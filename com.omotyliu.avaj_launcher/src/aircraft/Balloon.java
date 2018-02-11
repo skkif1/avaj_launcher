@@ -1,18 +1,21 @@
 package src.aircraft;
 
 import src.Coordinates;
+import src.weather.WeatherTower;
 
-public class Balloon extends Aircraft
-{
+public class Balloon extends Aircraft implements Flyable {
 
-    public Balloon(String name, Coordinates coord) {
+    Balloon(String name, Coordinates coord) {
         super(name, coord);
     }
+
+    private WeatherTower weatherTower;
+
 
     @Override
     public void updateConditions() {
 
-        String weather = getWeatherTower().getWeather(coord);
+        String weather = weatherTower.getWeather(coord);
 
         switch (weather) {
             case "RAIN":
@@ -32,8 +35,12 @@ public class Balloon extends Aircraft
                 super.updateConditions("Yahhh snow... , falling down");
                 break;
         }
+        if (coord.getHeight() <= 0)
+            weatherTower.unregister(this);
     }
 
-
-
+    @Override
+    public void registerTower(WeatherTower tower) {
+        this.weatherTower = tower;
+    }
 }

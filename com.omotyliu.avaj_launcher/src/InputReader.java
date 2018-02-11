@@ -46,7 +46,7 @@ public class InputReader
             lines.remove(0);
         }catch (Exception ex)
         {
-            throw new AvajInputException("Number of simulations is wrong");
+            throw new AvajInputException("Number of simulations is wrong (min 0  - max ?)");
         }
     }
 
@@ -83,8 +83,14 @@ public class InputReader
     {
         if(jet.length != 5)
             throw new AvajInputException("Scenario file is broken");
-
-        Coordinates planeCoord = new Coordinates(Integer.valueOf(jet[2]), Integer.valueOf(jet[3]), Integer.valueOf(jet[4]));
+        Coordinates planeCoord;
+        try
+        {
+            planeCoord = new Coordinates(Integer.valueOf(jet[2]), Integer.valueOf(jet[3]), Integer.valueOf(jet[4]));
+        }catch (RuntimeException ex)
+        {
+            throw new AvajInputException("Coordinates incorrect");
+        }
         return AircraftFactory.newAircraft(jet[0], jet[1], planeCoord);
     }
 }

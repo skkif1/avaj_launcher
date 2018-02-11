@@ -19,18 +19,6 @@ public class Coordinates
             throw new AvajInputException("coordinates are incorrect");
     }
 
-
-
-    public Coordinates(String longitude, String latitude, String height)
-    {
-        try {
-            new Coordinates(Integer.valueOf(longitude), Integer.valueOf(latitude), Integer.valueOf(height));
-        }catch (RuntimeException ex)
-        {
-            throw new AvajInputException("bad coordinates");
-        }
-    }
-
     public void change(int longitude, int latitude, int height)
     {
         this.longitude = longitude;

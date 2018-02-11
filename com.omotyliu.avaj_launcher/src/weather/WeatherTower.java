@@ -1,8 +1,6 @@
 package src.weather;
 
 import src.Coordinates;
-import src.Logger;
-import src.aircraft.Aircraft;
 import src.aircraft.Flyable;
 
 import java.util.List;
@@ -14,6 +12,8 @@ public class WeatherTower extends Tower
 
     private String currentWeather;
 
+    private Coordinates coord;
+
     public WeatherTower()
     {
         provider = WeatherProvider.getProvider();
@@ -21,15 +21,17 @@ public class WeatherTower extends Tower
 
     public String getWeather(Coordinates coord)
     {
+        this.coord = coord;
+        changeWeather();
         return currentWeather;
     }
 
 
-    private void changeWeather()
+    void changeWeather()
     {
-        currentWeather = provider.getCurrentWeather(null);
-
+        currentWeather = provider.getCurrentWeather(coord);
     }
+
 
     @Override
     public void register(List<Flyable> flyables)
@@ -41,13 +43,21 @@ public class WeatherTower extends Tower
         }
     }
 
+    @Override
+    protected void conditionsChanged()
+    {
+        for (Flyable plane : getObsorvers())
+        {
+            plane.updateConditions();
+        }
+        super.conditionsChanged();
+    }
+
     public void simulate(int i)
     {
-        for (int j = 1; j < i; j++)
+        for (int j = 0; j < i; j++)
         {
-            changeWeather();
             conditionsChanged();
         }
-
     }
 }

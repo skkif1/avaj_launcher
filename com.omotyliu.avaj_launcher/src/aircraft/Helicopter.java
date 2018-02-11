@@ -3,10 +3,12 @@ package src.aircraft;
 import src.Coordinates;
 import src.weather.WeatherTower;
 
-public class Helicopter extends Aircraft
+public class Helicopter extends Aircraft implements Flyable
 {
 
-    public Helicopter(String name, Coordinates coord)
+    private WeatherTower weatherTower;
+
+    Helicopter(String name, Coordinates coord)
     {
         super(name, coord);
     }
@@ -14,7 +16,7 @@ public class Helicopter extends Aircraft
     @Override
     public void updateConditions() {
 
-        String weather = getWeatherTower().getWeather(coord);
+        String weather = weatherTower.getWeather(coord);
 
         switch (weather)
         {
@@ -35,7 +37,16 @@ public class Helicopter extends Aircraft
                 super.updateConditions("it is not good , I am falling down");
                 break;
         }
+
+        if(coord.getHeight() <= 0)
+            weatherTower.unregister(this);
     }
+
+    @Override
+    public void registerTower(WeatherTower tower) {
+        this.weatherTower = tower;
+    }
+
 
 
 }

@@ -1,28 +1,26 @@
 package src.weather;
 
 import src.Logger;
-import src.aircraft.Aircraft;
-import src.aircraft.Flyable;
-
+import src.aircraft.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Tower
 {
-    private List<Flyable> obsorved;
+    private List<Flyable> obsorvers;
 
     private List<Flyable> toDell;
 
     public Tower()
 
     {
-        obsorved = new ArrayList<>();
+        obsorvers = new ArrayList<>();
         toDell = new ArrayList<>();
     }
 
     public void register(Flyable flyable)
     {
-        obsorved.add(flyable);
+        obsorvers.add(flyable);
     }
 
     public void unregister(Flyable flyable)
@@ -31,24 +29,23 @@ public class Tower
         Logger.logMessage("Tower says: " +  ((Aircraft)flyable).getCompoundName() + "  unregistered from weather tower.");
     }
 
+    protected List<Flyable> getObsorvers()
+    {
+        return this.obsorvers;
+    }
 
     protected void conditionsChanged()
     {
-        for (Flyable plane : obsorved)
-        {
-            plane.updateConditions();
-        }
-        obsorved.removeAll(toDell);
+        obsorvers.removeAll(toDell);
     }
 
     public void register(List<Flyable> flyables)
     {
-        obsorved.addAll(flyables);
+        obsorvers.addAll(flyables);
         for (Flyable plane : flyables)
         {
             Logger.logMessage("Tower says: " +  ((Aircraft)plane).getCompoundName() + " registered to weather tower.");
         }
     }
-
 
 }
