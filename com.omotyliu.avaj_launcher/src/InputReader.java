@@ -33,10 +33,10 @@ public class InputReader
 
     private static void getCount()
     {
-        String count = lines.get(0);
-
+      
         try
         {
+            String count = lines.get(0);
             long temp  = Long.valueOf(count);
             if(temp < 1 || temp > Integer.MAX_VALUE)
             {
@@ -62,7 +62,7 @@ public class InputReader
                 lines.add(line);
             reader.close();
         } catch (IOException e) {
-            throw new AvajInputException("Something wrong wiith file");
+            throw new AvajInputException("Something wrong with file");
         }
         getCount();
         createAircraft();
