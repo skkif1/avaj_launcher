@@ -12,10 +12,16 @@ public class Application
 
     public static void main(String[] args)
     {
+        
+
         List<Flyable> flyables = null;
         try {
 
-             flyables = InputReader.readAndCreate(args[0]);
+            if (args.length == 0)
+            {
+                throw new AvajInputException("usage programm <filename>");
+            }
+            flyables = InputReader.readAndCreate(args[0]);
         }catch (AvajInputException ex)
         {
             System.out.println(ex.getMessage());
